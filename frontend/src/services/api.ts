@@ -88,10 +88,6 @@ class ApiClient {
     return this.request(`/api/contentsquare/web-vitals/${pageGroupId}?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`);
   }
 
-  async getDeviceBreakdown(startDate: string, endDate: string): Promise<CSDeviceBreakdownResponse> {
-    return this.request(`/api/contentsquare/site-metrics-by-device?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`);
-  }
-
   async getGoals(): Promise<CSGoalsResponse> {
     return this.request('/api/contentsquare/goals');
   }
@@ -103,6 +99,79 @@ class ApiClient {
   async getPageGroupMetrics(pageGroupId: number, startDate: string, endDate: string): Promise<CSSiteMetricsResponse> {
     return this.request(`/api/contentsquare/page-metrics/${pageGroupId}?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`);
   }
+
+  async getBrowserBreakdown(): Promise<CSBrowserBreakdownResponse> {
+    return this.request('/api/contentsquare/browser-breakdown');
+  }
+
+  async getDeviceBreakdown(): Promise<CSDeviceBreakdownResponse> {
+    return this.request('/api/contentsquare/device-breakdown');
+  }
+
+  async getConversions(): Promise<CSConversionsResponse> {
+    return this.request('/api/contentsquare/conversions');
+  }
+
+  async getCountryBreakdown(): Promise<CSCountryBreakdownResponse> {
+    return this.request('/api/contentsquare/country-breakdown');
+  }
+
+  async getErrorTrends(): Promise<CSErrorTrendsResponse> {
+    return this.request('/api/contentsquare/error-trends');
+  }
+
+  async getJourney(): Promise<CSJourneyResponse> {
+    return this.request('/api/contentsquare/journey');
+  }
+
+  async getReverseJourney(): Promise<CSReverseJourneyResponse> {
+    return this.request('/api/contentsquare/reverse-journey');
+  }
+
+  async getPagesErrorsScatter(): Promise<CSPagesErrorsScatterResponse> {
+    return this.request('/api/contentsquare/pages-errors-scatter');
+  }
+
+  async getLostConversions(): Promise<CSLostConversionsResponse> {
+    return this.request('/api/contentsquare/lost-conversions');
+  }
+
+  async getConversionTrends(): Promise<CSConversionTrendsResponse> {
+    return this.request('/api/contentsquare/conversion-trends');
+  }
+
+  async getPlatformBreakdown(): Promise<CSPlatformBreakdownResponse> {
+    return this.request('/api/contentsquare/platform-breakdown');
+  }
+
+  async getUserSegmentsComparison(): Promise<CSUserSegmentsResponse> {
+    return this.request('/api/contentsquare/user-segments-comparison');
+  }
+
+  async getFunnelAnalysis(): Promise<CSFunnelAnalysisResponse> {
+    return this.request('/api/contentsquare/funnel-analysis');
+  }
+
+  async getPageDetailedMetrics(): Promise<CSPageDetailedMetricsResponse> {
+    return this.request('/api/contentsquare/page-detailed-metrics');
+  }
+
+  async getConversionTrendsPJ(): Promise<CSConversionTrendsResponse> {
+    return this.request('/api/contentsquare/conversion-trends-pj');
+  }
+
+  async getCityBreakdown(): Promise<CSCityBreakdownResponse> {
+    return this.request('/api/contentsquare/city-breakdown');
+  }
+
+  async getScreenResolution(): Promise<CSScreenResolutionResponse> {
+    return this.request('/api/contentsquare/screen-resolution');
+  }
+
+  async getPageErrorTrends(): Promise<CSPageErrorTrendsResponse> {
+    return this.request('/api/contentsquare/page-error-trends');
+  }
+
 }
 
 // Contentsquare raw API response format
@@ -153,20 +222,6 @@ export interface CSPageGroupsResponse {
   success: boolean;
 }
 
-export interface CSDeviceData {
-  visits: number;
-  bounceRate: number;
-  sessionTimeAverage: number;
-  pageviewAverage: number;
-}
-
-export interface CSDeviceBreakdownResponse {
-  desktop: CSDeviceData;
-  mobile: CSDeviceData;
-  tablet: CSDeviceData;
-  success: boolean;
-}
-
 export interface CSGoal {
   id: number;
   name: string;
@@ -191,6 +246,267 @@ export interface CSErrorsAnalysisResponse {
   errorRate: number;
   totalSessions: number;
   sessionsWithErrors: number;
+}
+
+export interface CSBrowserData {
+  name: string;
+  visits: number;
+  bounceRate: number;
+  sessionTimeAverage: number;
+  pageviewAverage: number;
+  visitWithErrors: number;
+}
+
+export interface CSBrowserBreakdownResponse {
+  browsers: CSBrowserData[];
+  success: boolean;
+}
+
+export interface CSDeviceData {
+  name: string;
+  visits: number;
+  bounceRate: number;
+  sessionTimeAverage: number;
+  pageviewAverage: number;
+}
+
+export interface CSDeviceBreakdownResponse {
+  devices: CSDeviceData[];
+  success: boolean;
+}
+
+export interface CSConversion {
+  goalId: number;
+  goalName: string;
+  conversionRate: number;
+  conversionCount: number;
+  type: string;
+}
+
+export interface CSConversionsResponse {
+  conversions: CSConversion[];
+  success: boolean;
+}
+
+export interface CSCountryData {
+  code: string;
+  name: string;
+  visits: number;
+  bounceRate: number;
+  visitWithErrors: number;
+}
+
+export interface CSCountryBreakdownResponse {
+  countries: CSCountryData[];
+  success: boolean;
+}
+
+export interface CSErrorTrendDay {
+  date: string;
+  visits: number;
+  visitWithErrors: number;
+}
+
+export interface CSErrorTrendsResponse {
+  dailyTrends: CSErrorTrendDay[];
+  success: boolean;
+}
+
+export interface CSFunnelStep {
+  name: string;
+  sessions: number;
+}
+
+export interface CSConversionFunnel {
+  name: string;
+  steps: CSFunnelStep[];
+}
+
+export interface CSLandingPage {
+  name: string;
+  sessions: number;
+  exitRate: number;
+}
+
+export interface CSJourneyResponse {
+  landingPages: CSLandingPage[];
+  conversionFunnels: CSConversionFunnel[];
+  totalSessions: number;
+  success: boolean;
+}
+
+export interface CSExitPage {
+  name: string;
+  sessions: number;
+  percentage: number;
+}
+
+export interface CSExitPath {
+  from: string;
+  to: string;
+  to2: string;
+  sessions: number;
+}
+
+export interface CSReverseJourneyResponse {
+  exitPages: CSExitPage[];
+  topExitPaths: CSExitPath[];
+  totalSessions: number;
+  success: boolean;
+}
+
+export interface CSPageErrorScatter {
+  pageId: number;
+  name: string;
+  visits: number;
+  visitWithErrors: number;
+  errorRate: number;
+}
+
+export interface CSPagesErrorsScatterResponse {
+  pages: CSPageErrorScatter[];
+  success: boolean;
+}
+
+export interface CSLostConversionPage {
+  pageId: number;
+  name: string;
+  visits: number;
+  visitWithErrors: number;
+  errorsCount: number;
+  lostConversions: number;
+}
+
+export interface CSLostConversionsResponse {
+  pages: CSLostConversionPage[];
+  goalName: string;
+  totalLostConversions: number;
+  success: boolean;
+}
+
+export interface CSUserSegment {
+  name: string;
+  visits: number;
+  bounceRate: number;
+  sessionTimeAverage: number;
+  pageviewAverage: number;
+  visitWithErrors: number;
+  errorRate: number;
+}
+
+export interface CSInsight {
+  label: string;
+  value: number;
+  description: string;
+}
+
+export interface CSUserSegmentsResponse {
+  segments: CSUserSegment[];
+  insights: CSInsight[];
+  success: boolean;
+}
+
+export interface CSFunnelStepDetail {
+  name: string;
+  sessions: number;
+  stepConversion: number;
+  stepDropOff: number;
+  timeToCompletion: number;
+}
+
+export interface CSFunnelDetail {
+  name: string;
+  steps: CSFunnelStepDetail[];
+}
+
+export interface CSFunnelAnalysisResponse {
+  funnels: CSFunnelDetail[];
+  success: boolean;
+}
+
+export interface CSPageDetailedMetric {
+  pageId: number;
+  name: string;
+  visits: number;
+  bounceRate: number;
+  exitRate: number;
+  scrollRate: number;
+  activityRate: number;
+  visitWithErrors: number;
+  errorRate: number;
+  elapsedTime: number;
+  interactionTime: number;
+  loadingTime: number;
+  conversionRate?: number;
+}
+
+export interface CSPageDetailedMetricsResponse {
+  pages: CSPageDetailedMetric[];
+  success: boolean;
+}
+
+export interface CSConversionTrendDay {
+  date: string;
+  visits: number;
+  conversionRate: number;
+  conversionCount: number;
+}
+
+export interface CSConversionTrendsResponse {
+  dailyConversions: CSConversionTrendDay[];
+  goalName: string;
+  success: boolean;
+}
+
+export interface CSPlatformData {
+  name: string;
+  visits: number;
+  bounceRate: number;
+  sessionTimeAverage: number;
+  percentage: number;
+}
+
+export interface CSPlatformBreakdownResponse {
+  platforms: CSPlatformData[];
+  success: boolean;
+}
+
+export interface CSCityData {
+  name: string;
+  visits: number;
+  percentage: number;
+}
+
+export interface CSCityBreakdownResponse {
+  cities: CSCityData[];
+  success: boolean;
+}
+
+export interface CSScreenResolution {
+  width: number;
+  visits: number;
+  percentage: number;
+}
+
+export interface CSScreenResolutionResponse {
+  resolutions: CSScreenResolution[];
+  success: boolean;
+}
+
+export interface CSPageDailyError {
+  date: string;
+  visits: number;
+  visitWithErrors: number;
+}
+
+export interface CSPageErrorTrend {
+  name: string;
+  dailyData: CSPageDailyError[];
+}
+
+export interface CSPageErrorTrendsResponse {
+  pages: CSPageErrorTrend[];
+  success: boolean;
 }
 
 export const api = new ApiClient();
